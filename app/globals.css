@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f7faf8;
+  --ink: #101815;
+}
+
+html,
+body {
+  background: radial-gradient(circle at 15% -5%, #e7f8ea 0%, #f7faf8 45%), #f7faf8;
+  color: var(--ink);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  user-select: none;
+}
