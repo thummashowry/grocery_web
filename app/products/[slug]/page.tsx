@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { TagChip } from "@/components/tag-chip";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { products } from "@/lib/data/mock";
 import { formatCurrency } from "@/lib/utils";
 
@@ -70,7 +71,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          <button className="mt-5 w-full rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-white">Add to cart</button>
+          <AddToCartButton productId={product.id} inStock={product.inStock} />
         </article>
       </section>
 

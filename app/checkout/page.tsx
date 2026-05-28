@@ -1,8 +1,11 @@
+"use client";
+
 import { CheckoutSteps } from "@/components/checkout-steps";
 import { formatCurrency } from "@/lib/utils";
+import { useCart } from "@/lib/cart-context";
 
 export default function CheckoutPage() {
-  const subtotal = 42.5;
+  const { subtotal } = useCart();
   const delivery = 4.99;
   const service = 1.5;
 

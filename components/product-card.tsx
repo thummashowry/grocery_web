@@ -1,11 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Plus, CircleAlert } from "lucide-react";
 import { type Product } from "@/types/product";
 import { TagChip } from "@/components/tag-chip";
 import { cn, formatCurrency } from "@/lib/utils";
+import { useCart } from "@/lib/cart-context";
 
 export function ProductCard({ product }: { product: Product }) {
+  const { add } = useCart();
   return (
     <article className="group rounded-2xl border border-spruce-100 bg-white p-3 shadow-soft transition hover:-translate-y-1 hover:shadow-card">
       <Link href={`/products/${product.slug}`} className="block overflow-hidden rounded-xl">
@@ -45,6 +49,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
 
           <button
+            onClick={() => add(product.id)}
             disabled={!product.inStock}
             className="inline-flex h-9 items-center gap-1 rounded-xl bg-spruce-600 px-3 text-xs font-semibold text-white transition hover:bg-spruce-700 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
