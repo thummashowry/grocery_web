@@ -2,12 +2,12 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { TagChip } from "@/components/tag-chip";
 import { AddToCartButton } from "@/components/add-to-cart-button";
-import { products } from "@/lib/data/mock";
+import { getProductBySlug } from "@/lib/data/queries";
 import { formatCurrency } from "@/lib/utils";
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = products.find((item) => item.slug === slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();

@@ -1,10 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Clock3, Truck, Sparkles } from "lucide-react";
-import { featuredCategories, products, promoCards, deliverySlots } from "@/lib/data/mock";
+import { getAllCategories, getAllProducts, getPromoCards, getDeliverySlots } from "@/lib/data/queries";
 import { PopularCarousel } from "@/components/popular-carousel";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [categories, products, promoCards, deliverySlots] = await Promise.all([
+    getAllCategories(),
+    getAllProducts(),
+    getPromoCards(),
+    getDeliverySlots(),
+  ]);
   return (
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6">
       <section className="animate-rise overflow-hidden rounded-3xl bg-white shadow-card">
@@ -45,11 +51,11 @@ export default function HomePage() {
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-ink sm:text-xl">Featured categories</h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {featuredCategories.map((category) => (
+          {categories.map((category) => (
             <button key={category.name} className="group overflow-hidden rounded-2xl bg-white shadow-soft transition hover:-translate-y-1">
               <div className="relative h-24 sm:h-28">
                 <Image
-                  src={`${category.image}?auto=format&fit=crop&w=500&q=70`}
+                  src={`${category.imageUrl}?auto=format&fit=crop&w=500&q=70`}
                   alt={category.name}
                   fill
                   className="object-cover transition duration-500 group-hover:scale-110"

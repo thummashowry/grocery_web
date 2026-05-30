@@ -1,5 +1,6 @@
 import { type Product } from "@/types/product";
 import { type StaffOrder, type TrackingEvent } from "@/types/order";
+import { type Coupon, type Employee, type StockDamageAlert } from "@/types/admin";
 
 export const featuredCategories = [
   { name: "Fruits", image: "https://images.unsplash.com/photo-1577234286642-fc512a5f8f11" },
@@ -7,6 +8,15 @@ export const featuredCategories = [
   { name: "Dairy", image: "https://images.unsplash.com/photo-1550583724-b2692b85b150" },
   { name: "Bakery", image: "https://images.unsplash.com/photo-1608198093002-ad4e005484ec" },
   { name: "Organic", image: "https://images.unsplash.com/photo-1542838132-92c53300491e" }
+];
+
+// Mutable list of product categories — admin can extend this
+export const productCategories: string[] = [
+  "Fruits",
+  "Vegetables",
+  "Dairy",
+  "Bakery",
+  "Organic"
 ];
 
 export const products: Product[] = [
@@ -34,7 +44,9 @@ export const products: Product[] = [
       protein: "2g",
       carbs: "9g",
       fat: "15g"
-    }
+    },
+    alternates: ["p2", "p3"],
+    discount: 10
   },
   {
     id: "p2",
@@ -138,7 +150,8 @@ export const products: Product[] = [
       protein: "8g",
       carbs: "44g",
       fat: "2g"
-    }
+    },
+    alternates: ["p6"]
   },
   {
     id: "p6",
@@ -214,6 +227,100 @@ export const staffOrders: StaffOrder[] = [
     status: "Completed",
     eta: "Courier assigned",
     requiresWeightAdjustment: false
+  }
+];
+
+export const coupons: Coupon[] = [
+  {
+    id: "c1",
+    code: "FRESH10",
+    type: "percentage",
+    value: 10,
+    minOrderAmount: 20,
+    expiresAt: "2026-07-31",
+    active: true,
+    usageCount: 142,
+    usageLimit: 500
+  },
+  {
+    id: "c2",
+    code: "SAVE5",
+    type: "fixed",
+    value: 5,
+    minOrderAmount: 30,
+    expiresAt: "2026-06-30",
+    active: true,
+    usageCount: 89,
+    usageLimit: 200
+  },
+  {
+    id: "c3",
+    code: "ORGANIC18",
+    type: "percentage",
+    value: 18,
+    minOrderAmount: 40,
+    expiresAt: "2026-05-31",
+    active: false,
+    usageCount: 500,
+    usageLimit: 500
+  }
+];
+
+export const employees: Employee[] = [
+  {
+    id: "e1",
+    name: "Sarah Mitchell",
+    email: "sarah.m@hybridgrocer.com",
+    role: "admin",
+    active: true,
+    joinedAt: "2024-03-15"
+  },
+  {
+    id: "e2",
+    name: "James Okoro",
+    email: "james.o@hybridgrocer.com",
+    role: "staff",
+    active: true,
+    joinedAt: "2024-06-01"
+  },
+  {
+    id: "e3",
+    name: "Priya Sharma",
+    email: "priya.s@hybridgrocer.com",
+    role: "staff",
+    active: true,
+    joinedAt: "2025-01-10"
+  },
+  {
+    id: "e4",
+    name: "Tom Bauer",
+    email: "tom.b@hybridgrocer.com",
+    role: "staff",
+    active: false,
+    joinedAt: "2023-11-20"
+  }
+];
+
+export const stockDamageAlerts: StockDamageAlert[] = [
+  {
+    id: "da1",
+    productId: "p5",
+    productName: "Stoneground Sourdough Loaf",
+    quantityDamaged: 3,
+    reason: "Water damage from refrigeration leak",
+    affectedOrderIds: ["ORD-2843"],
+    notificationSent: true,
+    createdAt: "2026-05-28T09:14:00Z"
+  },
+  {
+    id: "da2",
+    productId: "p3",
+    productName: "Farm Baby Spinach",
+    quantityDamaged: 5,
+    reason: "Delivery van temperature breach",
+    affectedOrderIds: ["ORD-2842", "ORD-2841"],
+    notificationSent: false,
+    createdAt: "2026-05-29T07:30:00Z"
   }
 ];
 

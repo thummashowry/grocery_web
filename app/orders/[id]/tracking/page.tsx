@@ -1,11 +1,12 @@
 import { MapPin, Timer } from "lucide-react";
 import { OrderTimeline } from "@/components/order-timeline";
-import { trackingEvents } from "@/lib/data/mock";
+import { getTrackingEvents } from "@/lib/data/queries";
 
 const statusPills = ["Pending", "Picking", "Completed", "Delivered"];
 
 export default async function TrackingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const trackingEvents = await getTrackingEvents(id);
 
   return (
     <div className="mx-auto max-w-5xl space-y-4 px-4 py-6 sm:px-6">

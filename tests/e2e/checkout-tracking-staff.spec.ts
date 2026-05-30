@@ -14,15 +14,15 @@ test.describe("Cart, checkout, tracking, and staff workflows", () => {
   });
 
   test("checkout reflects real cart subtotal, not a hardcoded value", async ({ page }) => {
-    // p1 × 2 = $8.40  |  + $4.99 delivery + $1.50 service = $14.89 total
+    // p1 × 2 = €8.40  |  + €4.99 delivery + €1.50 service = €14.89 total
     await page.addInitScript(() => {
       localStorage.setItem("hg_cart", JSON.stringify([{ productId: "p1", quantity: 2 }]));
     });
     await page.goto("/checkout");
 
-    await expect(page.getByText("$8.40")).toBeVisible();   // real subtotal
-    await expect(page.getByText("$14.89")).toBeVisible();  // real total
-    await expect(page.getByText("$42.50")).not.toBeVisible(); // old hardcoded value must be gone
+    await expect(page.getByText("8,40 \u20ac")).toBeVisible();   // real subtotal
+    await expect(page.getByText("14,89 \u20ac")).toBeVisible();  // real total
+    await expect(page.getByText("42,50 \u20ac")).not.toBeVisible(); // old hardcoded value must be gone
   });
 
   test("checkout supports step progression", async ({ page }) => {

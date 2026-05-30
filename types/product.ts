@@ -4,7 +4,7 @@ export type Product = {
   id: string;
   slug: string;
   name: string;
-  category: "Fruits" | "Vegetables" | "Dairy" | "Bakery" | "Organic";
+  category: string;
   description: string;
   image: string;
   gallery: string[];
@@ -21,4 +21,6 @@ export type Product = {
     carbs: string;
     fat: string;
   };
+  alternates?: string[]; // IDs of substitute products
+  discount?: number; // promotional discount percentage (0-100)
 };

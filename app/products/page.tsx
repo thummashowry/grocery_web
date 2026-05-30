@@ -1,9 +1,10 @@
 import { Search } from "lucide-react";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { ProductGridClient } from "@/components/product-grid-client";
-import { products } from "@/lib/data/mock";
+import { getAllProducts } from "@/lib/data/queries";
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const products = await getAllProducts();
   return (
     <div className="mx-auto grid max-w-7xl gap-4 px-4 py-6 sm:px-6 lg:grid-cols-[260px_1fr]">
       <FilterSidebar />

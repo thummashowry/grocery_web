@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
-import { deliverySlots } from "@/lib/data/mock";
+
+type DeliverySlot = { id: string; label: string; capacity: string; available: boolean };
 
 const steps = ["Address", "Delivery", "Payment", "Review"];
 
 export function CheckoutSteps() {
   const [step, setStep] = useState(0);
+  const [deliverySlots, setDeliverySlots] = useState<DeliverySlot[]>([]);
+
+  useEffect(() => {
+    fetch("/api/delivery-slots").then((r) => r.json()).then(setDeliverySlots);
+  }, []);
 
   return (
     <section className="space-y-5 rounded-2xl border border-spruce-100 bg-white p-4 shadow-soft sm:p-6">

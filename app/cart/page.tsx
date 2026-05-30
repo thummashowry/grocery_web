@@ -3,17 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
-import { products } from "@/lib/data/mock";
+import { useState, useEffect } from "react";
 import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/lib/cart-context";
+import { type Product } from "@/types/product";
 
 export default function CartPage() {
   const { items, add, update, remove, subtotal } = useCart();
   const delivery = 4.99;
+  const [productCatalog, setProductCatalog] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetch("/api/products").then((r) => r.json()).then(setProductCatalog);
+  }, []);
 
   const cartItems = items
     .map((entry) => {
-      const product = products.find((p) => p.id === entry.productId);
+      const product = productCatalog.find((p) => p.id === entry.productId);
       if (!product) return null;
       return { ...entry, product, total: entry.quantity * product.price };
     })
@@ -76,7 +82,7 @@ export default function CartPage() {
         <article className="rounded-2xl border border-spruce-100 bg-white p-4 shadow-soft">
           <h2 className="text-sm font-semibold">Suggested add-ons</h2>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {products.slice(0, 3).map((product) => (
+            {productCatalog.slice(0, 3).map((product) => (
               <button
                 key={product.id}
                 onClick={() => add(product.id)}

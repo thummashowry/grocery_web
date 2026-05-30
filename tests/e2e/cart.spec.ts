@@ -7,13 +7,14 @@ async function seedCart(page: Page, items: { productId: string; quantity: number
   }, items);
 }
 
-// Prices from mock data
-// p1 Organic Hass Avocado   $4.20
-// p2 Wild Blueberries        $7.80
-// p3 Farm Baby Spinach       $5.90
-// p4 Unsweetened Almond Milk $3.40
-// p5 Sourdough Loaf          $6.80  (out of stock)
-// p6 Greek Yogurt 2%         $4.90
+// Prices from DB — displayed as EUR via de-DE locale (e.g. "4,20 €")
+// p1 Organic Hass Avocado      €4.20  → "4,20 €"
+// p2 Wild Blueberries          €7.80  → "7,80 €"
+// p3 Farm Baby Spinach         €5.90  → "5,90 €"
+// p4 Unsweetened Almond Milk   €3.40  → "3,40 €"
+// p5 Stoneground Sourdough     €6.80  → "6,80 €"  (out of stock)
+// p6 Greek Yogurt 2%           €4.90  → "4,90 €"
+// delivery fee                 €4.99  → "4,99 €"
 
 test.describe("Cart — empty and seeded states", () => {
   test("empty cart shows empty state with shop link", async ({ page }) => {
@@ -38,17 +39,17 @@ test.describe("Cart — empty and seeded states", () => {
   });
 
   test("shows correct line total and grand total", async ({ page }) => {
-    // p1 × 2 = $8.40 subtotal  |  $8.40 + $4.99 = $13.39 grand total
+    // p1 × 2 = €8.40 subtotal  |  €8.40 + €4.99 = €13.39 grand total
     await seedCart(page, [{ productId: "p1", quantity: 2 }]);
     await page.goto("/cart");
 
-    // Line total and subtotal are the same value ($8.40) — first() picks line item
-    await expect(page.getByText("$8.40").first()).toBeVisible();
-    await expect(page.getByText("$13.39")).toBeVisible();
+    // Line total and subtotal are the same value — first() picks line item
+    await expect(page.getByText("8,40 \u20ac").first()).toBeVisible();
+    await expect(page.getByText("13,39 \u20ac")).toBeVisible();
   });
 
   test("multiple items show combined subtotal", async ({ page }) => {
-    // p1 × 1 ($4.20) + p4 × 2 ($6.80) = $11.00  |  $11.00 + $4.99 = $15.99
+    // p1 × 1 (€4.20) + p4 × 2 (€6.80) = €11.00  |  €11.00 + €4.99 = €15.99
     await seedCart(page, [
       { productId: "p1", quantity: 1 },
       { productId: "p4", quantity: 2 },
@@ -57,31 +58,31 @@ test.describe("Cart — empty and seeded states", () => {
 
     await expect(page.getByText(/organic hass avocado/i).first()).toBeVisible();
     await expect(page.getByText(/unsweetened almond milk/i).first()).toBeVisible();
-    await expect(page.getByText("$11.00")).toBeVisible();
-    await expect(page.getByText("$15.99")).toBeVisible();
+    await expect(page.getByText("11,00 \u20ac")).toBeVisible();
+    await expect(page.getByText("15,99 \u20ac")).toBeVisible();
   });
 });
 
 test.describe("Cart — quantity controls", () => {
   test("+ button increases quantity and recalculates line total", async ({ page }) => {
-    // p4 × 1 = $3.40
+    // p4 × 1 = €3.40
     await seedCart(page, [{ productId: "p4", quantity: 1 }]);
     await page.goto("/cart");
 
-    await expect(page.getByText("$3.40").first()).toBeVisible();
+    await expect(page.getByText("3,40 \u20ac").first()).toBeVisible();
     await page.getByRole("button", { name: "+" }).click();
-    // p4 × 2 = $6.80
-    await expect(page.getByText("$6.80").first()).toBeVisible();
+    // p4 × 2 = €6.80
+    await expect(page.getByText("6,80 \u20ac").first()).toBeVisible();
   });
 
   test("- button decreases quantity and recalculates line total", async ({ page }) => {
-    // p4 × 3 = $10.20  →  after click  p4 × 2 = $6.80
+    // p4 × 3 = €10.20  →  after click  p4 × 2 = €6.80
     await seedCart(page, [{ productId: "p4", quantity: 3 }]);
     await page.goto("/cart");
 
-    await expect(page.getByText("$10.20").first()).toBeVisible();
+    await expect(page.getByText("10,20 \u20ac").first()).toBeVisible();
     await page.getByRole("button", { name: "-" }).click();
-    await expect(page.getByText("$6.80").first()).toBeVisible();
+    await expect(page.getByText("6,80 \u20ac").first()).toBeVisible();
   });
 
   test("reducing quantity to 0 removes item and shows empty state", async ({ page }) => {

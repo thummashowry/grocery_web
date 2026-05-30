@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { products } from "@/lib/data/mock";
 
+type Product = { id: string; price: number };
 type CartItem = { productId: string; quantity: number };
 
 type CartContextValue = {
@@ -19,12 +19,16 @@ const STORAGE_KEY = "hg_cart";
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [catalog, setCatalog] = useState<Product[]>([]);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setItems(JSON.parse(raw));
     } catch {}
+    fetch("/api/products")
+      .then((r) => r.json())
+      .then((data: Product[]) => setCatalog(data));
   }, []);
 
   useEffect(() => {
@@ -50,7 +54,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prev) => prev.filter((i) => i.productId !== productId));
 
   const subtotal = items.reduce((sum, { productId, quantity }) => {
-    const p = products.find((x) => x.id === productId);
+    const p = catalog.find((x) => x.id === productId);
     return sum + (p ? p.price * quantity : 0);
   }, 0);
 
